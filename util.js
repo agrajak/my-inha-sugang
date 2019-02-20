@@ -34,7 +34,7 @@ class Cells {
   getCredit() { return this.credit }
   getSubjects() { return this.subjects }
   get(ind){ 
-    return this.arr[ind] 
+    return this.arr[ind]
   }
   size(){
     return this.arr.length
@@ -85,7 +85,7 @@ class Cells {
     for(let i=1;i<=25;i++){
       const a = [];
       for(let j=0;j<5;j++){
-        a.push(' ')
+        a.push(-1)
       }
       arr.push(a)
     } 
@@ -93,11 +93,11 @@ class Cells {
       x.getTime().split(',').forEach(t=>{
         const day = t.match(/(.)(\d+)/)[1]
         const num = t.match(/(.)(\d+)/)[2]
-        if(day == '월') arr[num][0] = String(i)
-        if(day == '화') arr[num][1] = String(i)
-        if(day == '수') arr[num][2] = String(i)
-        if(day == '목') arr[num][3] = String(i)
-        if(day == '금') arr[num][4] = String(i)
+        if(day == '월') arr[num][0] = i
+        if(day == '화') arr[num][1] = i
+        if(day == '수') arr[num][2] = i
+        if(day == '목') arr[num][3] = i
+        if(day == '금') arr[num][4] = i
       })
     })
     return arr
@@ -124,6 +124,8 @@ class Cell {
     // ToDo
     return true
   }
+  getSubject(){ return this.data.subject}
+  getPf(){ return this.data.name_pf}
   getTime(){ return this.data.time }
   getCredit(){ return Number(this.data.credit) }
   getSnoCode(){ return this.data.sno }

@@ -49,7 +49,7 @@
             <td>
               <div class="buttons">
                 <button class="button is-small is-danger" @click="희망분반_삭제(cell.code)">해당 분반 삭제</button>
-                <button class="button is-small is-link">필수여부(O)</button>
+                <button @click="필수과목_토글(cell.code)" class="button is-small" :class="{'is-link': cell.important}">필수여부({{cell.important?'O':'X'}})</button>
               </div>
             </td>
           </template>
@@ -95,7 +95,7 @@ import 영어 from '../data/영어.json'
 import 교양필수 from '../data/교양필수.json'
 export default {
   name: 'subject-viewer',
-  props: ['add_subject', 'add_bunban', 'desired_subject', 'category', 'search', 'value'],
+  props: ['category', 'search', 'value'],
   created (){
     this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수]
   },
@@ -159,10 +159,12 @@ export default {
       this.index = this.index==0?0:this.index-1
     },
     필수과목_토글(코드){
+      console.log('딸깍!')
       const index = this.value.map(x=>x.code).indexOf(코드)
       if(index != -1){
         this.value[index].important = !this.value[index].important
       }
+      console.log(index)
       this.$emit('change', this.value)
     },
     희망과목_삭제(과목코드){

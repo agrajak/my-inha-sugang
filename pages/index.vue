@@ -69,35 +69,7 @@
       <div class="container">
         <button @click="getResult()" class="button is-centered" :class="{'is-loading':isProgress}">계산하기</button>
         <p class="help">계산에는 시간이 다소 걸릴 수 있습니다. (1분-3분)</p>
-        <div v-if="result">
-          <div v-if="result.length > 0">
-            <button class="button is-small" @click="index = index==0?0:index-1">이전 페이지</button>
-            <span class="button is-small">{{index}}</span>
-            <button class="button is-small" @click="index = index==result.length-1?result.length-1:index+1">다음 페이지</button>
-          </div>
-          <table class="table is-bordered">
-            <thead>
-              <th>월</th>
-              <th>화</th>
-              <th>수</th>
-              <th>목</th>
-              <th>금</th>
-            </thead>
-            <tbody>
-              <tr v-if="result.length == 0">
-                <td colspan="5">
-                  읍다
-                </td>
-              </tr>
-              <tr v-else v-for="(col,i) in result[index].print()" :key="i">
-                <td v-for="(row, j) in col" :key="j">{{row}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div v-if="result.length > 0">
-            {{result[index].getSubjects()}}
-          </div>
-        </div>
+        <time-table-viewer :result="result"></time-table-viewer>
       </div>
       <footer class="footer">
         <div class="content has-text-centered">
@@ -119,18 +91,18 @@
 <script>
 import {Cell, Cells} from '../util.js'
 import run from '../index.js'
+import TimeTableViewer from '../components/TimeTableViewer.vue'
 import SubjectViewer from '../components/SubjectViewer.vue'
 export default {
   name: 'index',
   components: {
-    SubjectViewer
+    TimeTableViewer, SubjectViewer
   },
   data(){
     return {
       result: undefined,
       과목: [],
       categoryList: ['전체', '전공선택', '전공필수', '핵심교양', '교양선택', '교양필수'],
-      index: 0,
       search: '',
       maxCredit: 19, 
       minCredit: 1,
