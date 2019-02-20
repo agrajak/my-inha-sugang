@@ -2,7 +2,7 @@ function deepCopy(obj){
   const newObj = JSON.parse(JSON.stringify(obj))
   if(obj instanceof Array){
     for(let i=0,size=obj.length;i<size;i++){
-      if(obj[i] instanceof Object){
+      if(obj[i] instanceof Cell){
 //        console.log( Object.create(Object.getPrototypeOf(obj[i])))
         newObj[i] = Object.assign(obj[i], Object.create(Object.getPrototypeOf(obj[i])))
       }
@@ -21,9 +21,9 @@ class Cells {
       if(obj instanceof Cells){
         this.arr = deepCopy(obj.arr)
         this.times = deepCopy(obj.times)
-        this.credit = obj.credit
         this.subjects = deepCopy(obj.subjects)
         this.isStrict = obj.isStrict
+        this.credit = obj.credit
       }
       else throw new TypeError("obj must be instance of Cells or Cell")  
     }

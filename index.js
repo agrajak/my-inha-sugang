@@ -15,7 +15,7 @@ async function 시간표_긁어오기(과들){
   (await loadCells(undefined, ['영어', '일반교양'])).forEach(x=>{
     arr.push(x)
   })
-  console.log(`최종 시간표 갯수 : ${arr.length}`)
+  console.log(`긁어온 최종 시간표 갯수 : ${arr.length}`)
   return arr
   // TODO: 핵심교양
 }
@@ -30,18 +30,28 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
       시간표.filter(x=>x.sno == s).forEach(x=>list.merge(new Cell(x)))
     }
   })
-//  시간표.filter(x=>희망과목.includes(x.subject)).forEach(x=>list.merge(new Cell(x)))
-  // const criteria = [...(new Set(시간표.filter(x=>필수과목.includes(x.subject)).map(x=>x.sno.match(/(.*)-(.*)/)[1])))] 
+  const criteria = new Cells()
+  필수과목.forEach((s,i)=>{
+    if(s.indexOf('-') != -1){ // 분반일때
+      시간표.filter(x=>x.sno == s).forEach(x=>criteria.merge(new Cell(x)))
+      필수과목.splice(i,1)
+    }
+    else {
+      시간표.filter(x=>x.sno.match(/(.*)-(.*)/)[1] == s).forEach(x=>list.merge(new Cell(x)))
+    }
+  })
 
   return {
-    list, criteria: 필수과목
+    list, criteria, important: 필수과목
   }
 }
 async function loadCells(){
   return [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
 }
 async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1){
-  const { list, criteria } = await 희망과목_고르기(await 시간표_긁어오기(depts), 희망과목, 필수과목)
+  console.log(` * 최소학점 : ${minCredit} 최대학점: ${maxCredit}`)
+  console.log(` * 희망과목 : ${희망과목} 필수과목: ${필수과목}`)
+  const { list, criteria, important } = await 희망과목_고르기(await 시간표_긁어오기(depts), 희망과목, 필수과목)
   // DP - 이중 배열 초기화 + 삼중
   const t = []
   for(let i=0,size=list.size();i<=size;i++){
@@ -53,10 +63,10 @@ async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1)
   }
   console.time('calc')
   for(let i=0, size=list.size();i<=size;i++){
-    t[i][0].push(new Cells(undefined, true))
+    t[i][0].push(new Cells(criteria, true))
   }
   for(let i=0;i<=maxCredit;i++){
-    t[0][i].push(new Cells(undefined, true))
+    t[0][i].push(new Cells(criteria, true))
   }
   for(let i=1, size=list.size();i<=size;i++){
     for(let j=1;j<=maxCredit;j++){
@@ -87,12 +97,13 @@ async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1)
   console.log(` * 최소 학점이 넘는 리스트 갯수 : ${cResult1.length}`)
   const cResult2 = []
   cResult1.forEach(x => {
-    for(const c of criteria){
+    for(const c of important){
       if(!x.getSubjects().includes(c)) return
     }
     cResult2.push(x)
   })
   console.log(` * 필수로 포함시켜야할 과목이 포함된 리스트 갯수 : ${cResult2.length}`)
+  // console.log(JSON.stringify(cResult1, null, 2))
   return cResult2
 }
 export default run 
