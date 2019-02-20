@@ -1,0 +1,16 @@
+{
+  "name": "my-inha-sugang",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "inha-timetable": "^1.0.5",
+    "nuxt": "^2.4.3",
+    "v-suggest": "^1.1.3"
+  }
+}
