@@ -6,7 +6,7 @@
  - 이름 멋진거로 바꾸기
  - 핵교 선택 넣기
    - utils.js안의 Cells.prototype.isAvailable()에서 같은 핵교가 추가되면 false를 리턴하도록 변경하게
- - 전공.json에 다른 과 추가하기 
+ - 전공.json에 다른 과 추가하기 - UI 어떻게??
  - 표 꾸미기(bulma 사용안해도 상관없음)
 ## 기여
  - 이슈든 건의사항이든 풀 리퀘스트든 언제든 환영입니다!
@@ -14,6 +14,8 @@
 ## 설치
 ```bash
 npm install
+mkdir data # data 폴더 만들기
+node init # 시간표 긁어오기
 npm run dev
 ```
 http://localhost:3000/my-inha-sugang 으로 이동
@@ -21,6 +23,7 @@ http://localhost:3000/my-inha-sugang 으로 이동
 ## 배포 
 ```bash
 npm install 
+node init # 시간표 긁어오기
 npm run generate
 ```
 master 브랜치에 병합되면 자동으로 CircleCI가 gh-pages에 배포합니다.
