@@ -106,6 +106,9 @@ export default {
   watch: {
     category () {
       this.index = 0
+    },
+    search () {
+      this.index = 0
     }
   },
   computed: {

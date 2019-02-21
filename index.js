@@ -23,15 +23,16 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
   })
   
   const criteria = new Cells()
-  필수과목.forEach((s,i)=>{
-    if(s.indexOf('-') != -1){ // 분반일때
-      시간표.filter(x=>x.sno == s).forEach(x=>criteria.merge(new Cell(x)))
+  for(let i=0;i<필수과목.length;i++){
+    if(필수과목[i].indexOf('-') != -1){ // 분반일때
+      시간표.filter(x=>x.sno == 필수과목[i]).forEach(x=>criteria.merge(new Cell(x)))
       필수과목.splice(i,1)
+      i--;
     }
     else { // 과목일때
-      시간표.filter(x=>x.sno.match(/(.*)-(.*)/)[1] == s).forEach(x=>list.merge(new Cell(x)))
+      시간표.filter(x=>x.sno.match(/(.*)-(.*)/)[1] == 필수과목[i]).forEach(x=>list.merge(new Cell(x)))
     }
-  })
+  }
 
   return {
     list, criteria, important: 필수과목

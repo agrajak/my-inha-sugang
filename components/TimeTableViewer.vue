@@ -48,6 +48,11 @@ export default {
   components: {
     CellViewer
   },
+  watch: {
+    result (){
+      this.index = 0
+    }
+  },
   computed: {
     table (){
       // 기존의 25줄은 => 30분씩
@@ -117,8 +122,7 @@ export default {
   data (){
     return {
       index: 0,
-      days: ["월", "화", "수", "목", "금"],
-      times: ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1',]
+      days: ["월", "화", "수", "목", "금"]
     }
   },
 }

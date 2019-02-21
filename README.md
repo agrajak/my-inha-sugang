@@ -1,11 +1,12 @@
 # 인하대학교 수강신청 시간표 생성기
 > 현재는 컴퓨터공학과와 정보통신공학과만 지원합니다.
+수강을 희망하는 과목들을 선택하면 다양한 조건(분반, 최소학점, 최대학점)에 맞는 가능한 모든 경우의 수를 구해줍니다!
 
 [![CircleCI](https://circleci.com/gh/Agrajak/my-inha-sugang/tree/master.svg?style=svg)](https://circleci.com/gh/Agrajak/my-inha-sugang/tree/master)
 
 [이동하기](https://agrajak.github.io/my-inha-sugang/)
 ## 해야할 것
- - 이름 멋진거로 바꾸기
+ - 이름, 로고, 파비콘 멋진거로 바꾸기
  - 핵교 선택 넣기
    - utils.js안의 Cells.prototype.isAvailable()에서 같은 핵교가 추가되면 false를 리턴하도록 변경하게
  - 전공.json에 다른 과 추가하기
