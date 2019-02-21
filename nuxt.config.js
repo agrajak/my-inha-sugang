@@ -10,7 +10,7 @@ module.exports = {
         {rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css'}
     ],
     router: {
-      base: '/my-inha-sugang/'
+      base: 'https://agrajak.github.io/my-inha-sugang/'
     }
   }
 }
