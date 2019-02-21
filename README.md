@@ -11,6 +11,9 @@
  - 전공.json에 다른 과 추가하기
    - 그냥 init.js에 과 이름 추가하면 됨, 과 이름은 [inha-timetable](https://github.com/agrajak/inha-timetable)의 getDeptCode 참고
  - 표 꾸미기(bulma 사용안해도 상관없음)
+ - 결과로 나온 시간표들 정렬 기준 만들기
+   - 학점 순서? 금공강 순서?
+   - 공강 시간표 몇개인지 보여주기 ex) 총 13개 시간표 중 월 공강 2개, 금 공강 1강 
 ## 기여
  - 이슈든 건의사항이든 풀 리퀘스트든 언제든 환영입니다!
 
