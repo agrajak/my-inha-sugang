@@ -56,4 +56,4 @@ jobs:
             git config user.name "azurepeal"
       - run:
           name: Deploy docs to gh-pages branch
-          command: push-dir --dir=dist --branch=gh-pages --cleanup
+          command: push-dir --dir=dist --branch=gh-pages --cleanup --allow-unclean
