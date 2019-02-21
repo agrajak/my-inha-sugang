@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "inha-timetable": "^1.0.5",
+    "inha-timetable": "^1.0.6",
     "nuxt": "^2.4.3",
     "push-dir": "^0.4.1",
-    "v-suggest": "^1.1.3"
+    "v-suggest": "^1.1.3",
+    "fs-extra": "^7.0.1"
+    
   }
 }

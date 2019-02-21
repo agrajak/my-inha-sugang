@@ -36,6 +36,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: crawling subject datas
+          command: |
+            node init
 
       # run tests!
       - run: npm run generate

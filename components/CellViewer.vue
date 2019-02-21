@@ -7,8 +7,8 @@
         {{data.상세.getSubject()}}({{data.상세.getPf()}})
         <span class="item-hover">
           <div>
-          {{data.상세.getSno()}}
-          {{data.시작교시}} ~ {{data.종료교시}} <br>
+          {{data.상세.getSnoCode()}}
+          {{data.시작시간}} ~ {{data.종료시간}} <br>
           {{data.상세.getPlace()}} <br>
           {{data.상세.getBigo()}}
           </div>
