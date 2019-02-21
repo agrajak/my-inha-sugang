@@ -3,7 +3,6 @@ function deepCopy(obj){
   if(obj instanceof Array){
     for(let i=0,size=obj.length;i<size;i++){
       if(obj[i] instanceof Cell){
-//        console.log( Object.create(Object.getPrototypeOf(obj[i])))
         newObj[i] = Object.assign(obj[i], Object.create(Object.getPrototypeOf(obj[i])))
       }
     }
