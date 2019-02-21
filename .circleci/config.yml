@@ -35,3 +35,19 @@ jobs:
 
       # run tests!
       - run: npm run generate
+  docs-deploy:
+    docker:
+      - image: circleci/node:8.12
+    steps:
+      - checkout
+      - attach_workspace:
+          at: dist
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email "korbots@gmail.com"
+            git config user.name "azurepeal"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dist dist
