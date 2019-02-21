@@ -3,6 +3,10 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
+general:
+  branches:
+    only:
+     - master # list of branches to build
 jobs:
   build:
     docker:
@@ -35,6 +39,10 @@ jobs:
 
       # run tests!
       - run: npm run generate
+      - run:
+          name: touch dist/.nojekyll
+          command: |
+            touch dist/.nojekyll    
       - attach_workspace:
           at: dist
       - run:
