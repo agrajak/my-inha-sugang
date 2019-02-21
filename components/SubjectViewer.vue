@@ -4,6 +4,7 @@
       <thead>
         <th>학수번호</th>
         <th>과목이름</th>
+        <th>학과</th>
         <th>학년</th>
         <th>학점</th>
         <th>분류</th>
@@ -20,6 +21,7 @@
           <template v-if="cell.code.indexOf('-') == -1">
             <td>{{cell.code}}</td>
             <td>{{cell.detail.subject}}</td>
+            <td>{{cell.detail.deptName}}</td>
             <td>{{cell.detail.grade}}</td>
             <td>{{cell.detail.credit}}</td>
             <td>{{cell.detail.category}}</td>
@@ -38,6 +40,7 @@
           <template v-else>
             <td>{{cell.code}}</td>
             <td>{{cell.detail.subject}}</td>
+            <td>{{cell.detail.deptName}}</td>
             <td>{{cell.detail.grade}}</td>
             <td>{{cell.detail.credit}}</td>
             <td>{{cell.detail.category}}</td>
@@ -62,6 +65,7 @@
         <tr v-else v-for="(cell, i) in list_page" :key="i+value.length">
           <td>{{cell.sno}}</td>
           <td>{{cell.subject}}</td>
+          <td>{{cell.deptName}}</td>
           <td>{{cell.grade}}</td>
           <td>{{cell.credit}}</td>
           <td>{{cell.category}}</td>
@@ -95,7 +99,7 @@ import 영어 from '../data/영어.json'
 import 교양필수 from '../data/교양필수.json'
 export default {
   name: 'subject-viewer',
-  props: ['category', 'search', 'value'],
+  props: ['category', 'search', 'value', 'subject'],
   created (){
     this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수]
   },
@@ -105,6 +109,7 @@ export default {
     }
   },
   computed: {
+    // pagination
     list_page () {
       if(this.list_size < this.pagination){
         return this.filtered_list
@@ -119,6 +124,7 @@ export default {
     max_page(){
       return Math.floor(this.list_size / this.pagination)
     },
+    // 필터는 여기서 다하기
     filtered_list (){
       function is한글(str){
         return /[가-힣]/.test(str)
@@ -134,20 +140,21 @@ export default {
             if(cho.includes(s)){
               result += s
             }
-            else if(code>-1 && code<11172) result += cho[Math.floor(code/588)];
-            
+            else if(code>-1 && code<11172) result += cho[Math.floor(code/588)]; 
           }
           return result;
         }
         return str
       }
       let list = []      
-      // list = this.list.filter(x=>Object.values(초성(x)).join(',').indexOf(초성(this.search))!= -1)
-      console.log(초성(this.search))
       list = this.list.filter(x=>초성(x.subject).indexOf(초성(this.search))!= -1)
+
+      // 카테고리로 필터
       if(this.category != '전체'){
         list = list.filter(x=>x.category == this.category)
       } 
+      //list = list.filter(x=>x.category == this.category)
+      list = list.filter(x=>(x.deptName == undefined) || x.deptName.indexOf(this.subject) != -1)
       return list      
     }
   },

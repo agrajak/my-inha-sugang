@@ -9,7 +9,7 @@
           <div>
           {{data.상세.getSnoCode()}}
           {{data.시작시간}} ~ {{data.종료시간}} <br>
-          {{data.상세.getPlace()}} <br>
+          {{data.상세.getDetailPlace()}} <br>
           {{data.상세.getBigo()}}
           </div>
         </span>

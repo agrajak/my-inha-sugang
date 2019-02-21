@@ -8,7 +8,7 @@
               인하대학교 시간표 생성기
             </h1>
             <h2 class="subtitle">
-              Work In Progress
+              임시로 정보통신공학과와 컴퓨터공학과만 지원합니다.
             </h2>
           </div>
         </div>
@@ -24,6 +24,18 @@
             <div class="field">
               <p class="control is-expanded">
                 <input class="input" v-model="search" placeholder="과목이름을 입력해보세요 예)ㅈㄹㄱㅈㄹ, 자료구조론">
+              </p>
+            </div>
+          </div>      
+        </div>
+        <div class="field is-horizontal">
+          <div class="field-label is-normal">
+            <label class="label">학과 검색</label>
+          </div>
+          <div class="field-body">
+            <div class="field">
+              <p class="control is-expanded">
+                <input class="input" v-model="subject" placeholder="예) 정보통신, 컴퓨터">
               </p>
             </div>
           </div>      
@@ -62,7 +74,7 @@
       </div>  
     </section>
     <section class="section">
-      <subject-viewer :search="search" :category="category" v-model="과목"></subject-viewer>
+      <subject-viewer :search="search" :subject="subject" :category="category" v-model="과목"></subject-viewer>
     </section>
     <section class="section">
       <div class="container">
@@ -105,6 +117,7 @@ export default {
       과목: [],
       categoryList: ['전체', '전공선택', '전공필수', '핵심교양', '교양선택', '교양필수'],
       search: '',
+      subject: '',
       maxCredit: 19, 
       minCredit: 1,
       category: '전체',
@@ -113,6 +126,7 @@ export default {
   },
   methods: {
     getResult(학과=['정보통신공학과']){
+      this.result = []
       this.isProgress = true
       const 희망과목 = this.과목.filter(x=>!x.important).map(x=>x.code)
       const 필수과목 = this.과목.filter(x=>x.important).map(x=>x.code)

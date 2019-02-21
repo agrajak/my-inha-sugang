@@ -134,6 +134,7 @@ class Cell {
   getPf(){ return this.data.name_pf}
   getTime(){ return this.data.time }
   getPlace(){ return this.data.place }
+  getDetailPlace(){ return this.data.detail_place }
   getCredit(){ return Number(this.data.credit) }
   getBigo(){ return this.data.bigo }
   getSnoCode(){ return this.data.sno }
