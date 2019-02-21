@@ -38,9 +38,12 @@ jobs:
       - attach_workspace:
           at: dist
       - run:
-          name: Install and configure dependencies
+          name: Install dependencies
           command: |
             npm install -g --silent gh-pages@2.0.1
+      - run:
+          name: Configure git details
+          command: |
             git config user.email "korbots@gmail.com"
             git config user.name "azurepeal"
       - run:
