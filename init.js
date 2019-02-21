@@ -15,14 +15,14 @@ async function init () {
     for(let 과 of 과들){
       교양필수.concat(await getTimeTable(getDeptCode(과), '교양필수', true))
     }
-    await fs.writeFile(교양필수, 'data/교양필수.json')
+    await fs.writeFile('data/교양필수.json', 교양필수)
   
     const 전공 = []
   
     for(let 과 of 과들){
       전공.concat(await getTimeTable(getDeptCode(과), '교양필수', true))
     }
-    await fs.writeFile(전공, 'data/전공.json')      
+    await fs.writeFile('data/전공.json', 전공)
   }
   catch(e){
     console.log('에러발생!')
