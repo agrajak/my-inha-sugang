@@ -7,16 +7,7 @@ const 교양필수 = require('./data/교양필수.json')
 
 async function 시간표_긁어오기(과들){
   const arr = []
-  for(const 과 of 과들){
-    (await loadCells(과, ['전공', '교양필수'])).forEach(x=>{
-      arr.push(x)
-    })
-  }
-  (await loadCells(undefined, ['영어', '일반교양'])).forEach(x=>{
-    arr.push(x)
-  })
-  console.log(`긁어온 최종 시간표 갯수 : ${arr.length}`)
-  return arr
+  return [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
   // TODO: 핵심교양
 }
 async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[]){
@@ -30,13 +21,14 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
       시간표.filter(x=>x.sno == s).forEach(x=>list.merge(new Cell(x)))
     }
   })
+  
   const criteria = new Cells()
   필수과목.forEach((s,i)=>{
     if(s.indexOf('-') != -1){ // 분반일때
       시간표.filter(x=>x.sno == s).forEach(x=>criteria.merge(new Cell(x)))
       필수과목.splice(i,1)
     }
-    else {
+    else { // 과목일때
       시간표.filter(x=>x.sno.match(/(.*)-(.*)/)[1] == s).forEach(x=>list.merge(new Cell(x)))
     }
   })
@@ -45,13 +37,13 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
     list, criteria, important: 필수과목
   }
 }
-async function loadCells(){
-  return [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
-}
 async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1){
   console.log(` * 최소학점 : ${minCredit} 최대학점: ${maxCredit}`)
   console.log(` * 희망과목 : ${희망과목} 필수과목: ${필수과목}`)
   const { list, criteria, important } = await 희망과목_고르기(await 시간표_긁어오기(depts), 희망과목, 필수과목)
+  console.log(`* list: ${list.size()}`)
+  console.log(`* criteria: ${criteria.size()}`)
+  console.log(`* important: ${important.length}`)
   // DP - 이중 배열 초기화 + 삼중
   const t = []
   for(let i=0,size=list.size();i<=size;i++){

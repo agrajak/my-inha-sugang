@@ -10,6 +10,8 @@ function deepCopy(obj){
   }
   return newObj
 }
+// Cell을 배열로 담고 있음
+// isStrict=true 일때는 시간이 겹치게 merge할 수 없음
 class Cells {
   constructor(obj, isStrict = false){
     this.arr = []
@@ -39,11 +41,13 @@ class Cells {
   size(){
     return this.arr.length
   }
+  // Cell을 추가한 새로운 Cells를 반환함
   add(cell){
     const newCells = new Cells(this, this.isStrict)
     newCells.merge(cell)
     return newCells
   }
+  // 해당 Cells 에 Cell을 추가함
   merge(cell){
     if(!(cell instanceof Cell)){
       throw new TypeError("obj is not instanceof Cell")
@@ -57,6 +61,8 @@ class Cells {
     this.credit += cell.getCredit()
     this.subjects.push(cell.getSno())
   }
+
+  // 새로 추가할 Cell이 Cells과 시간이 겹치는가 안겹치는가 확인시켜줌
   isAvailable(cell){
     if(!(cell instanceof Cell)) throw new TypeError("obj is not instanceof Cell")
     const b = cell.getTime().split(',')
@@ -80,6 +86,7 @@ class Cells {
     // 아무 조건도 걸치지 않으면 true 리턴
     return true
   }
+  // Cells에 담긴 시간표를 5*25사이즈 배열에 담아줌
   print(){
     let arr=[];
     for(let i=1;i<=25;i++){
@@ -93,11 +100,11 @@ class Cells {
       x.getTime().split(',').forEach(t=>{
         const day = t.match(/(.)(\d+)/)[1]
         const num = t.match(/(.)(\d+)/)[2]
-        if(day == '월') arr[num][0] = i
-        if(day == '화') arr[num][1] = i
-        if(day == '수') arr[num][2] = i
-        if(day == '목') arr[num][3] = i
-        if(day == '금') arr[num][4] = i
+        if(day == '월') arr[num-1][0] = i
+        if(day == '화') arr[num-1][1] = i
+        if(day == '수') arr[num-1][2] = i
+        if(day == '목') arr[num-1][3] = i
+        if(day == '금') arr[num-1][4] = i
       })
     })
     return arr
@@ -127,8 +134,11 @@ class Cell {
   getSubject(){ return this.data.subject}
   getPf(){ return this.data.name_pf}
   getTime(){ return this.data.time }
+  getPlace(){ return this.data.place }
   getCredit(){ return Number(this.data.credit) }
+  getBigo(){ return this.data.bigo }
   getSnoCode(){ return this.data.sno }
+  getBunBan() { return this.data.sno.match(/(.*)-(.*)/)[2] }
   getSno() { return this.data.sno.match(/(.*)-(.*)/)[1] }
 }
 export { Cell, Cells }

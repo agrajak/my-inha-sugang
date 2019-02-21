@@ -62,15 +62,16 @@
       </div>  
     </section>
     <section class="section">
-      <!-- TODO: v-model 바인딩 -->
       <subject-viewer :search="search" :category="category" v-model="과목"></subject-viewer>
     </section>
-    <div class="section">
+    <section class="section">
       <div class="container">
         <button @click="getResult()" class="button is-centered" :class="{'is-loading':isProgress}">계산하기</button>
-        <p class="help">계산에는 시간이 다소 걸릴 수 있습니다. (1분-3분)</p>
+        <p class="help">계산에는 시간이 다소 걸릴 수 있습니다. 모바일페이지에서는 표가 보이지 않습니다.</p>
         <time-table-viewer :result="result"></time-table-viewer>
       </div>
+    </section>
+    <section class="section">
       <footer class="footer">
         <div class="content has-text-centered">
           <div>
@@ -85,7 +86,7 @@
           </div>
         </div>
       </footer>
-    </div>
+    </section>
   </div>
 </template>
 <script>
