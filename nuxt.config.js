@@ -12,5 +12,8 @@ module.exports = {
   },
   router: {
     base: '/my-inha-sugang/'
-  }
+  },
+  plugins: [
+    {src: '~/ga.js', ssr: false}
+  ]
 }

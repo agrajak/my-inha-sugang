@@ -5,9 +5,9 @@ const 핵심교양 = require('./data/핵심교양.json')
 const 영어 = require('./data/영어.json')
 const 교양필수 = require('./data/교양필수.json')
 
-async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[]){
+async function 희망과목_고르기(희망과목=[], 필수과목=[]){
   const list = new Cells()
-
+  const 시간표 = [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
   // 희망과목을 분반과 과목으로 분리해서 조건에 맞는 시간표를 list에 추가한다.
   희망과목.forEach(s=>{
     if(s.indexOf('-') == -1){ // 과목일때
@@ -48,7 +48,7 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
 async function run(희망과목, 필수과목, maxCredit=19, minCredit=1){
   console.log(` * 최소학점 : ${minCredit} 최대학점: ${maxCredit}`)
   console.log(` * 희망과목 : ${희망과목} 필수과목: ${필수과목}`)
-  const { list, criteria, important } = await 희망과목_고르기([...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양], 희망과목, 필수과목)
+  const { list, criteria, important } = await 희망과목_고르기(희망과목, 필수과목)
   console.log(`* list: ${list.size()}`)
   console.log(`* criteria: ${criteria.size()}`)
   console.log(`* important: ${important.length}`)
