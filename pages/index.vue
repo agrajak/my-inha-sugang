@@ -5,7 +5,7 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">
-              인하대학교 시간표 생성기
+              인하대학교 시간표 생성기 v{{version}}
             </h1>
             <h2 class="subtitle">
               임시로 정보통신공학과와 컴퓨터공학과만 지원합니다.
@@ -77,9 +77,12 @@
       <subject-selector :search="search" :subject="subject" :category="category" v-model="과목"></subject-selector>
     </section>
     <section class="section">
-      <div class="container">
-        <p class="help">모바일페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>
-        <p class="help">해당 서비스는 제공하는 시간표를 사용하는 것에 어떠한 책임도 지지 않습니다.</p>
+      <div class="container has-text-centered">
+        <div v-if="!result">
+          <p class="help">모바일 페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>
+          <p class="help">해당 서비스는 이용자가 제공하는 시간표를 사용하는 것에 대하여 어떠한 책임도 지지 않습니다.</p>
+          <p class="help">분반의 개수가 많으면 계산하는데 시간이 오래 걸릴 수도 있습니다. (보통 1분내외)</p>        
+        </div>
         <div class="section">
           <button @click="getResult()" class="button is-centered is-link is-medium" :class="{'is-loading':isProgress}">시간표 계산하기</button>
         </div>
@@ -109,6 +112,7 @@ import {Cell, Cells} from '../util.js'
 import run from '../index.js'
 import TimeTableViewer from '../components/TimeTableViewer.vue'
 import SubjectSelector from '../components/SubjectSelector.vue'
+import Package from '../package.json'
 export default {
   name: 'index',
   components: {
@@ -127,22 +131,30 @@ export default {
       isProgress: false
     }
   },
+  computed: {
+    version () {
+      return Package.version
+    }
+  },
   methods: {
     getResult(){
       this.result = []
       this.isProgress = true
+      this.$forceUpdate()
+      console.log(`현재 진행! ${this.isProgress}`)
       const 희망과목 = this.과목.filter(x=>!x.important).map(x=>x.code)
       const 필수과목 = this.과목.filter(x=>x.important).map(x=>x.code)
-      this.$forceUpdate()
-      this.$nextTick().then(()=>{
-        run(희망과목, 필수과목, this.maxCredit, this.minCredit).then(r=>{
-          this.result = r
-          this.isProgress = false
-        }) 
-        .catch(e=>{
-          this.isProgress = false
-          console.log('에러발생')
-          console.log(e)
+      this.$nextTick(()=>{
+        window.requestAnimationFrame(()=>{
+          run(희망과목, 필수과목, this.maxCredit, this.minCredit).then(r=>{
+            this.result = r
+            this.isProgress = false
+          }) 
+          .catch(e=>{
+            this.isProgress = false
+            console.log('에러발생')
+            console.log(e)
+          })
         })
       })
     }

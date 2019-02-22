@@ -46,11 +46,19 @@ export default {
     getColor(i){
       if(i === undefined || i === -1){ return '#FFFFFF'}
       return this.colors[i<this.colors.length?i:this.colors.length-1]
+    },
+    changeColor(){
+      if(this.data && !this.data.공강){
+        this.$refs.cell.style['background-color'] = this.getColor(this.data.index)
+      }
     }
   },
   mounted (){
-    if(this.data){
-      this.$refs.cell.style['background-color'] = this.getColor(this.data.index)
+    this.changeColor()
+  },
+  watch:{
+    data () {
+      this.changeColor()
     }
   }
 }

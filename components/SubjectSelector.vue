@@ -86,7 +86,7 @@
     </table>
     <div class="field is-grouped is-grouped-centered">
       <button class="button is-small" @click="previous_page" :disabled="index == 0">이전 페이지</button>
-      <span class="button is-small" disabled>{{index+1}} / {{max_page+1}}</span>
+      <span class="button is-small">{{index+1}} / {{max_page+1}}</span>
       <button class="button is-small" @click="next_page" :disabled="index == max_page">다음 페이지</button>
     </div>
 

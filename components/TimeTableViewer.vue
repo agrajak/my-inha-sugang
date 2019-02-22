@@ -2,7 +2,8 @@
   <!-- 계산된 시간표들을 보여줍니다. -->
   <div id="timetable-viewer" v-if="result">
     <div v-if="result.length == 0">
-      시간표가 하나도 없어요...
+      조건에 맞는 시간표가 하나도 없어요... <br>
+      필수 분반끼리 시간이 겹치는지 한번 확인해주세요..
     </div>
     <div v-else>
       <div v-if="result.length > 0">
@@ -13,10 +14,36 @@
             <button class="button is-small" @click="index = index==result.length-1?result.length-1:index+1" :disabled="index==result.length-1">다음 페이지</button>
           </div>
           <div>
-            <p>
-              총 수강 학점 : {{result[index].getCredit()}} <br>
+            <p class="has-text-centered">
               과목과 교시에 마우스 커서를 올리시면 더 자세한 정보를 확인할 수 있습니다.<br>
+              표가 한 화면에 보이지 않으면 Ctrl +, -로 조정하세요
             </p>
+            <nav class="level">
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">총 학점</p>
+                  <p class="title">{{result[index].getCredit()}}</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">총 수업시간</p>
+                  <p class="title">{{Math.floor(summary.수업시간/4)}}시간 {{(summary.수업시간*15)%60}}분</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">최장 연강</p>
+                  <p class="title">{{Math.floor(summary.최장연강/4)}}시간 {{(summary.최장연강*15)%60}}분</p>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                  <p class="heading">수업일수</p>
+                  <p class="title">{{summary.수업일수}}/5</p>
+                </div>
+              </div>
+            </nav>
           </div>
         </div>
       </div>
@@ -65,7 +92,37 @@ export default {
     }
   },
   computed: {
-    table (){
+    summary () {
+      let 수업일수 = 0
+      let 최장연강 = 0
+      let 수업시간 = 0
+      let 연강 = 0
+      let flag = false
+      if(this.table){
+        for(let i=0;i<5;i++){
+          flag = false
+          연강 = 0
+          for(let cell of this.table[i]){
+            if(cell.index != -1){
+              flag = true
+              수업시간 += cell.시간
+              연강 += cell.시간
+              if(최장연강 < 연강){
+                최장연강 = 연강
+              }
+            }
+            else if(cell.시간 != 1){
+              연강 = 0
+            }
+          }
+          수업일수 += !!flag
+        }
+      }
+      return {
+        수업일수, 최장연강, 수업시간
+      }
+    },
+    table () {
       // TODO: 해당내용 Cells.print()로 옮겨버리기
       const arr = []
       if(this.result){
