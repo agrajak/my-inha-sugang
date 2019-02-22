@@ -10,6 +10,7 @@
   "author": "korbots@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "@nuxtjs/google-analytics": "^2.1.0",
     "fs-extra": "^7.0.1",
     "inha-timetable": "^1.0.6",
     "nuxt": "^2.4.3",

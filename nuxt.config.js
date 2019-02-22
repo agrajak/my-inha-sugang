@@ -13,7 +13,9 @@ module.exports = {
   router: {
     base: '/my-inha-sugang/'
   },
-  plugins: [
-    {src: '~/ga.js', ssr: false}
+  modules: [
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-135023650-1'
+    }]
   ]
 }
