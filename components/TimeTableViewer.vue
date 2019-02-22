@@ -1,39 +1,50 @@
 <template>
+  <!-- 계산된 시간표들을 보여줍니다. -->
   <div id="timetable-viewer" v-if="result">
     <div v-if="result.length == 0">
       시간표가 하나도 없어요...
     </div>
     <div v-else>
       <div v-if="result.length > 0">
-        <div class="section">
-          <div class="container">
+        <div class="container">
+          <div class="field is-grouped is-grouped-centered">
             <button class="button is-small" @click="index = index==0?0:index-1" :disabled="index == 0">이전 페이지</button>
             <span class="button is-small">{{index+1}} / {{result.length}}</span>
             <button class="button is-small" @click="index = index==result.length-1?result.length-1:index+1" :disabled="index==result.length-1">다음 페이지</button>
+          </div>
+          <div>
             <p>
-              총 학점 : {{result[index].getCredit()}}
+              총 수강 학점 : {{result[index].getCredit()}} <br>
+              과목과 교시에 마우스 커서를 올리시면 더 자세한 정보를 확인할 수 있습니다.<br>
             </p>
           </div>
         </div>
       </div>
-      <div class="tile is-ancestor is-hidden-mobile">
-        <div class="tile is-parent is-vertical is-1">
-          <div class="tile is-child day cell">
-            <cell-viewer text="시간" :height="2"></cell-viewer>
+      <div class="section column is-10 is-offset-1">
+        <!-- 시간표 헤더 -->
+        <div class="tile is-ancestor">
+          <div class="tile is-parent is-1">
+            <div class="tile is-child day cell">
+              <cell-viewer text="시간" :height="2"></cell-viewer>
+            </div>
           </div>
-          <div class="tile is-child cell" v-for="(time, i) in (new Array(25))" :key="i"> 
-            <cell-viewer :time="i+1" :height="2"></cell-viewer>
+          <div class="tile is-parent is-2" v-for="(day, i) in table" :key="i+30">
+            <div class="tile is-child day cell">
+              <cell-viewer :text="days[i]" :height="2"></cell-viewer>
+            </div>
           </div>
         </div>
-        <div class="tile is-parent is-vertical is-2" v-for="(day, i) in table" :key="i+30">
-          <div class="tile is-child day cell">
-            <cell-viewer :text="days[i]" :height="2"></cell-viewer>
+        <!-- 시간표 바디 -->
+        <div class="tile is-ancestor is-hidden-mobile is-text-centered">
+          <div class="tile is-parent is-vertical is-1">
+            <div class="tile is-child cell" v-for="(time, i) in (new Array(25))" :key="i"> 
+              <cell-viewer :time="i+1" :height="2"></cell-viewer>
+            </div>
           </div>
-          <!-- <div class="tile is-child cell" v-for="(cell, j) in day" :key="j+52">
-            {{cell}}
-          </div> -->
-          <div class="tile is-child cell" v-for="(cell, j) in day" :key="j+52">
-            <cell-viewer :data="cell" :height="cell.시간"></cell-viewer>
+          <div class="tile is-parent is-vertical is-2" v-for="(day, i) in table" :key="i+30">
+            <div class="tile is-child cell" v-for="(cell, j) in day" :key="j+52">
+              <cell-viewer :data="cell" :height="cell.시간"></cell-viewer>
+            </div>
           </div>
         </div>
       </div>
@@ -55,8 +66,6 @@ export default {
   },
   computed: {
     table (){
-      // 기존의 25줄은 => 30분씩
-      // 이거를 2개로 나누자!
       // TODO: 해당내용 Cells.print()로 옮겨버리기
       const arr = []
       if(this.result){
@@ -77,13 +86,13 @@ export default {
         for(let i=0;i<5;i++){
           const obj = []
           for(let j=0;j<25;){
+            const 지금_공강 = result[j][i] == -1
             let k=j+1
             for(;k<25;k++){
               if(result[k][i] != result[j][i]) break;
             }
             // k-j : 연강 갯수
-            const 지금_공강 = result[j][i] == -1
-            // 1교시 공가이 붙어있을때 합치기
+            // 1교시 공강이 붙어있을때 합치기
             if(전에_강의가_공강 && 지금_공강){
               obj[obj.length-1].연강 += k-j
               obj[obj.length-1].시간 += (k-j)*2
@@ -132,16 +141,24 @@ export default {
   font-size: 0.8em;
 }
 .tile.is-vertical>.tile.is-child:not(:last-child) {
-  margin: 0!important;
+  margin: 0 !important;
 }
 .tile.is-parent {
-  padding: 0!important;
+  padding: 0 !important;
 }
 .tile {
   flex-shrink: 0 !important;
   flex-grow: 1 !important;
   flex-basis: auto !important;
   box-sizing: border-box;
+}
+.day {
+  font-size: 1.2em;
+  margin: 0.4em;
+  text-align: center;
+}
+.is-text-centered {
+  text-align: center;
 }
 </style>
 

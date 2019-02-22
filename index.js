@@ -5,14 +5,10 @@ const 핵심교양 = require('./data/핵심교양.json')
 const 영어 = require('./data/영어.json')
 const 교양필수 = require('./data/교양필수.json')
 
-async function 시간표_긁어오기(과들){
-  const arr = []
-  return [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
-  // TODO: 핵심교양
-}
 async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[]){
   const list = new Cells()
-  // TODO : 희망과목이 분반이 포함되어있지않으면 모든 분반 추가
+
+  // 희망과목을 분반과 과목으로 분리해서 조건에 맞는 시간표를 list에 추가한다.
   희망과목.forEach(s=>{
     if(s.indexOf('-') == -1){ // 과목일때
       시간표.filter(x=>x.sno.match(/(.*)-(.*)/)[1] == s).forEach(x=>list.merge(new Cell(x)))
@@ -23,6 +19,12 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
   })
   
   const criteria = new Cells()
+  // 필수과목을 분반과 과목으로 쪼갠다.
+
+  // 분반 => criteria
+  // 분반에 추가되지 않는 과목들은 important에 저장
+  // 과목 => list에 추가
+  
   for(let i=0;i<필수과목.length;i++){
     if(필수과목[i].indexOf('-') != -1){ // 분반일때
       시간표.filter(x=>x.sno == 필수과목[i]).forEach(x=>criteria.merge(new Cell(x)))
@@ -37,15 +39,20 @@ async function 희망과목_고르기(시간표, 희망과목=[], 필수과목=[
   return {
     list, criteria, important: 필수과목
   }
+  // list: 조합해야할 과목 목록
+  // criteria: 무조건 포함되어야할 분반들, Cells의 초기값이다.
+  // important: criteria가 들어있는 Cells에 list에 적혀있는 과목/분반등을 조합해 많은 수의 시간표를 만들어내면,
+  //            그 중 important에 적혀있는 과목들이 모두 포함 된 시간표만 반환해준다.
+
 }
-async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1){
+async function run(희망과목, 필수과목, maxCredit=19, minCredit=1){
   console.log(` * 최소학점 : ${minCredit} 최대학점: ${maxCredit}`)
   console.log(` * 희망과목 : ${희망과목} 필수과목: ${필수과목}`)
-  const { list, criteria, important } = await 희망과목_고르기(await 시간표_긁어오기(depts), 희망과목, 필수과목)
+  const { list, criteria, important } = await 희망과목_고르기([...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양], 희망과목, 필수과목)
   console.log(`* list: ${list.size()}`)
   console.log(`* criteria: ${criteria.size()}`)
   console.log(`* important: ${important.length}`)
-  // DP - 이중 배열 초기화 + 삼중
+  // DP
   const t = []
   for(let i=0,size=list.size();i<=size;i++){
     const c = []
@@ -79,24 +86,21 @@ async function run(depts, 희망과목, 필수과목, maxCredit=19, minCredit=1)
     }
   }
   console.timeEnd('calc')
-  const result = t[list.size()][maxCredit]
+  let result = t[list.size()][maxCredit]
   console.log(` * 가능한 시간표 경우의 수 : ${result.length}`)
-  const cResult1 = []
-  result.forEach(x=>{
-    if(x.getCredit() >= minCredit){
-      cResult1.push(x)
-    }
-  })
-  console.log(` * 최소 학점이 넘는 리스트 갯수 : ${cResult1.length}`)
-  const cResult2 = []
-  cResult1.forEach(x => {
+
+  // 학점 기준 필터링
+  result = result.filter(x => x.getCredit() >= minCredit && x.getCredit() <= maxCredit)
+  console.log(` * 학점 기준이 맞는 리스트 갯수 : ${result.length}`)
+
+  // important가 모두 포함되어있지 않은 시간표는 제외한다.
+  result = result.filter(x => {
     for(const c of important){
-      if(!x.getSubjects().includes(c)) return
+      if(!x.getSubjects().includes(c)) return false
     }
-    cResult2.push(x)
+    return true
   })
-  console.log(` * 필수로 포함시켜야할 과목이 포함된 리스트 갯수 : ${cResult2.length}`)
-  // console.log(JSON.stringify(cResult1, null, 2))
-  return cResult2
+  console.log(` * 필수로 포함시켜야할 과목이 포함된 리스트 갯수 : ${result.length}`)
+  return result
 }
 export default run 

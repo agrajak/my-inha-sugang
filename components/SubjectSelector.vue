@@ -1,5 +1,6 @@
 <template>
-  <div id="subject-viewer">
+  <!-- 희망과목, 필수과목 분반 선택을 도와줍니다. -->
+  <div id="subject-selector">
     <table class="table is-narrow is-hoverable is-fullwidth">
       <thead>
         <th>학수번호</th>
@@ -31,8 +32,8 @@
             <td></td>
             <td></td>
             <td>
-              <div class="buttons">
-                <button class="button is-small is-danger" @click="희망과목_삭제(cell.code)">해당 과목 삭제</button>
+              <div class="buttons has-addons">
+                <button class="button is-small" @click="희망과목_삭제(cell.code)">해당 과목 선택해제</button>
                 <button @click="필수과목_토글(cell.code)" class="button is-small" :class="{'is-link': cell.important}">필수여부({{cell.important?'O':'X'}})</button>
               </div>
             </td>
@@ -50,8 +51,8 @@
             <td>{{cell.detail.rate}}</td>
             <td>{{cell.detail.bigo}}</td>
             <td>
-              <div class="buttons">
-                <button class="button is-small is-danger" @click="희망분반_삭제(cell.code)">해당 분반 삭제</button>
+              <div class="buttons has-addons">
+                <button class="button is-small" @click="희망분반_삭제(cell.code)">해당 분반 선택해제</button>
                 <button @click="필수과목_토글(cell.code)" class="button is-small" :class="{'is-link': cell.important}">필수여부({{cell.important?'O':'X'}})</button>
               </div>
             </td>
@@ -98,7 +99,7 @@ import 핵심교양 from '../data/핵심교양.json'
 import 영어 from '../data/영어.json'
 import 교양필수 from '../data/교양필수.json'
 export default {
-  name: 'subject-viewer',
+  name: 'subject-selector',
   props: ['category', 'search', 'value', 'subject'],
   created (){
     this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수]
@@ -229,7 +230,7 @@ export default {
 }
 </script>
 <style>
-#subject-viewer{
+#subject-selector{
   font-size: 0.8em;
 }
 </style>

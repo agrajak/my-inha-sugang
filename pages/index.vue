@@ -74,12 +74,15 @@
       </div>  
     </section>
     <section class="section">
-      <subject-viewer :search="search" :subject="subject" :category="category" v-model="과목"></subject-viewer>
+      <subject-selector :search="search" :subject="subject" :category="category" v-model="과목"></subject-selector>
     </section>
     <section class="section">
       <div class="container">
-        <button @click="getResult()" class="button is-centered" :class="{'is-loading':isProgress}">계산하기</button>
-        <p class="help">계산에는 시간이 다소 걸릴 수 있습니다. 모바일페이지에서는 표가 보이지 않습니다.</p>
+        <p class="help">모바일페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>
+        <p class="help">해당 서비스는 제공하는 시간표를 사용하는 것에 어떠한 책임도 지지 않습니다.</p>
+        <div class="section">
+          <button @click="getResult()" class="button is-centered is-link is-medium" :class="{'is-loading':isProgress}">시간표 계산하기</button>
+        </div>
         <time-table-viewer :result="result"></time-table-viewer>
       </div>
     </section>
@@ -105,11 +108,11 @@
 import {Cell, Cells} from '../util.js'
 import run from '../index.js'
 import TimeTableViewer from '../components/TimeTableViewer.vue'
-import SubjectViewer from '../components/SubjectViewer.vue'
+import SubjectSelector from '../components/SubjectSelector.vue'
 export default {
   name: 'index',
   components: {
-    TimeTableViewer, SubjectViewer
+    TimeTableViewer, SubjectSelector
   },
   data(){
     return {
@@ -125,14 +128,14 @@ export default {
     }
   },
   methods: {
-    getResult(학과=['정보통신공학과']){
+    getResult(){
       this.result = []
       this.isProgress = true
       const 희망과목 = this.과목.filter(x=>!x.important).map(x=>x.code)
       const 필수과목 = this.과목.filter(x=>x.important).map(x=>x.code)
       this.$forceUpdate()
       this.$nextTick().then(()=>{
-        run(학과, 희망과목, 필수과목, this.maxCredit, this.minCredit).then(r=>{
+        run(희망과목, 필수과목, this.maxCredit, this.minCredit).then(r=>{
           this.result = r
           this.isProgress = false
         }) 

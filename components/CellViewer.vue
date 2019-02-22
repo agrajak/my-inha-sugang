@@ -1,5 +1,6 @@
 <template>
-  <div :style="`height: ${height}em;`" class="cell">
+  <!-- TimeTableViewer에서 하나의 Cell을 담당합니다. -->
+  <div ref="cell" :style="`height: ${height}em;`" class="cell">
     <span v-if="data" class="item-parent">
       <span v-if="data.공강">
       </span>
@@ -35,12 +36,29 @@
 <script>
 export default {
   name: 'cell-viewer',
-  props: ['data', 'height', 'time', 'text']
+  props: ['data', 'height', 'time', 'text'],
+  data(){
+    return {
+      colors: ['#FFB2A3', '#FFE0A3', '#EFFFA3', '#C1FFA3', '#A3FFB2', '#A3FFE0', '#A3EFFF', '#A3C1FF', '#B2A3FF']
+    }
+  },
+  methods: {
+    getColor(i){
+      if(i === undefined || i === -1){ return '#FFFFFF'}
+      return this.colors[i<this.colors.length?i:this.colors.length-1]
+    }
+  },
+  mounted (){
+    if(this.data){
+      this.$refs.cell.style['background-color'] = this.getColor(this.data.index)
+    }
+  }
 }
 </script>
 <style scoped>
 .cell {
-  border: 0.1px solid lightslategray;
+  border: 0.1px solid white;
+  
   margin: 0 auto;
 }
 .item-parent {
