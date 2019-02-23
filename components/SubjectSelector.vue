@@ -131,26 +131,31 @@ export default {
     // 필터는 여기서 다하기
     filtered_list (){
       function is한글(str){
-        return /[가-힣]/.test(str)
+        return /[ㄱ-ㅎ|ㄳ-ㅄ|가-힝]/.test(str)
         // http://blog.daum.net/osban/14691815
       }
       function 초성(str) {
         if(is한글(str)){
-          const cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+          const 초 = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+          const 겹 = {"ㄳ": "ㄱㅅ", "ㄵ": "ㄴㅈ", "ㄶ": "ㄴㅎ", "ㄺ":"ㄹㄱ", "ㄻ":"ㄹㅁ", "ㄼ":"ㄹㅂ", "ㄽ":"ㄹㅅ", "ㄿ":"ㄹㅍ", "ㅀ":"ㄹㅎ", "ㅄ": "ㅂㅅ"}
           let result = "";
           for(let i=0;i<str.length;i++) {
-            const s = str.charCodeAt(i)
-            const code = s-44032;
-            if(cho.includes(s)){
-              result += s
+            const code = str.charCodeAt(i)-44032
+            const c = str.charAt(i)
+            if(Object.keys(겹).includes(c)){
+              result += 겹[c]
             }
-            else if(code>-1 && code<11172) result += cho[Math.floor(code/588)]; 
+            else if(초.includes(c)){
+              result += c
+            }
+            else if(code>-1 && code<11172) result += 초[Math.floor(code/588)]; 
           }
           return result;
         }
         return str
       }
       let list = []      
+      console.log(초성(this.search))
       list = this.list.filter(x=>초성(x.subject).indexOf(초성(this.search))!= -1)
 
       // 카테고리로 필터
