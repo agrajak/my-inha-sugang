@@ -9,6 +9,131 @@ function deepCopy(obj){
   }
   return newObj
 }
+
+const 교시2시간_시작 = (교시)=> {
+  if(교시%2 == 1){
+    return `${교시/2+8.5}시`
+  }
+  return `${교시/2+8}시 30분`
+}
+const 교시2시간_끝 = (교시)=> {
+  if(교시%2 == 1){
+    return `${교시/2+7.5}시 45분`
+  }
+  return `${교시/2+8}시 15분`
+}
+class TimeTables {
+  constructor(){
+    this.arr = []
+  }
+  push(obj){
+    if(!(obj instanceof TimeTable)){
+      throw new TypeError("obj must be instance of TimeTable")      
+    }
+    this.arr.push(obj)
+  }
+  get(index){
+    return this.arr[index]
+  }
+  sort(field){
+    const fields = ['총학점', '수업시간', '최장연강', '수업일수']
+    if(!(fields.includes(field))){
+      throw new Error("invalid field!")
+    }
+    this.arr = this.arr.sort((a,b)=>(a[field]-b[field]))
+  }
+}
+// Cells의 배열을 출력하기 쉬운 정보로 가공
+class TimeTable {
+  constructor(cells){
+    if(!(cells instanceof Cells)){
+      throw new TypeError("obj must be instance of Cells")      
+    }
+    this.학점 = 0
+    this.수업시간 = 0
+    this.총학점 = cells.getCredit()
+    this.최장연강 = 0
+    this.수업일수 = 0
+    this.arr = []
+    this.obj = cells
+    const arr = []
+    let 전에_강의가_공강 = false
+    const result = cells.print()
+    
+    for(let i=0;i<5;i++){
+      const obj = []
+      for(let j=0;j<25;){
+        const 지금_공강 = result[j][i] == -1
+        let k=j+1
+        for(;k<25;k++){
+          if(result[k][i] != result[j][i]) break;
+        }
+        // k-j : 연강 갯수
+        // 1교시 공강이 붙어있을때 합치기
+        if(전에_강의가_공강 && 지금_공강){
+          obj[obj.length-1].연강 += k-j
+          obj[obj.length-1].시간 += (k-j)*2
+          obj[obj.length-1].공강 += 지금_공강
+        }
+        else {
+          obj.push({
+            index: result[j][i],
+            상세: 지금_공강 ? null : cells.get(result[j][i]),
+            연강: k-j,
+            시간: 지금_공강 ? (k-j)*2 : (k-j)*2-1,
+            공강: 지금_공강,
+            시작시간: 교시2시간_시작(j+1),
+            종료시간: 교시2시간_끝(k+1)
+          })
+        }
+        if(!지금_공강){
+          obj.push({
+            index: -1,
+            상세: null,
+            연강: 0,
+            시간: 1,
+            공강: true
+          })
+          전에_강의가_공강 = true
+        }
+        else 전에_강의가_공강 = false
+        j=k;
+      }
+      arr.push(obj)
+    }
+    this.arr = arr
+
+    // 연강/수업일수/최장연강/수업시간을 계산한다.
+
+    let 연강 = 0
+    let flag = false
+    for(let i=0;i<5;i++){
+      flag = false
+      연강 = 0
+      for(let cell of arr[i]){
+        if(cell.index != -1){
+          flag = true
+          this.수업시간 += cell.시간
+          연강 += cell.시간
+          if(this.최장연강 < 연강){
+            this.최장연강 = 연강
+          }
+        }
+        else if(cell.시간 != 1){
+          연강 = 0
+        }
+      }
+      this.수업일수 += !!flag
+    }
+  }
+  get(){
+    return this.arr
+  }
+  getCells(){
+    return this.obj
+  }
+}
+
 // Cell을 배열로 담고 있음
 // isStrict=true 일때는 시간이 겹치게 merge할 수 없음
 class Cells {
@@ -141,4 +266,4 @@ class Cell {
   getBunBan() { return this.data.sno.match(/(.*)-(.*)/)[2] }
   getSno() { return this.data.sno.match(/(.*)-(.*)/)[1] }
 }
-export { Cell, Cells }
+export { Cell, Cells, TimeTable, TimeTables}

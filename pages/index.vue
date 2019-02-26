@@ -8,7 +8,7 @@
               인하대학교 시간표 생성기 v{{version}}
             </h1>
             <h2 class="subtitle">
-              임시로 정보통신공학과와 컴퓨터공학과만 지원합니다.
+              임시로 정보통신공학과와 컴퓨터공학과만 지원합니다. <strong><a href="https://www.notion.so/agrajak/c6732e39aa41449a8e3e596bf9054f73" target="_blank">사용법</a></strong>(클릭)
             </h2>
           </div>
         </div>
@@ -23,7 +23,7 @@
           <div class="field-body">
             <div class="field">
               <p class="control is-expanded">
-                <input class="input" v-model="search" placeholder="과목이름을 입력해보세요 예)ㅈㄹㄱㅈㄹ, 자료구조론">
+                <input class="input" @input="e=>search=e.target.value" placeholder="과목이름을 입력해보세요(초성검색도 지원) 예)ㅈㄺㅈㄹ, 자료구조론">
               </p>
             </div>
           </div>      

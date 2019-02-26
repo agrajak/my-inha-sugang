@@ -51,6 +51,9 @@ export default {
       if(this.data && !this.data.공강){
         this.$refs.cell.style['background-color'] = this.getColor(this.data.index)
       }
+      if(this.data && this.data.공강){
+        this.$refs.cell.style['background-color'] = '#FFFFFF'
+      }      
     }
   },
   mounted (){
