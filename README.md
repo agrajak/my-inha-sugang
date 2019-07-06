@@ -12,7 +12,6 @@
 ## 해야할 것
  - 이름, 로고, 파비콘 멋진거로 바꾸기
  - 툴팁 형식의 가이드 추가
- - SubjectSelector에서 선택된 과목은 표시 안되도록 변경 -> 별도의 표에 장바구니 저장하는 것으로 변경 고려해보기
  - 핵교 선택 넣기
    - utils.js안의 Cells.prototype.isAvailable()에서 같은 핵교가 추가되면 false를 리턴하도록 변경하게
 
@@ -26,7 +25,7 @@
 ```bash
 npm install
 mkdir data # data 폴더 만들기
-node init # 시간표 긁어오기
+npm run fetch # 시간표 긁어오기
 npm run dev
 ```
 http://localhost:3000/my-inha-sugang 으로 이동
@@ -34,7 +33,7 @@ http://localhost:3000/my-inha-sugang 으로 이동
 ## 배포 
 ```bash
 npm install 
-node init # 시간표 긁어오기
+npm run fetch # 시간표 긁어오기
 npm run generate
 ```
 master 브랜치에 병합되면 자동으로 CircleCI가 gh-pages에 배포합니다.

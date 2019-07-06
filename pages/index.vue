@@ -73,10 +73,17 @@
         </div>
       </div>  
     </section>
+    <section>
+      <div class="container has-text-centered">
+        <p>하단의 표에서 원하는 과목/분반을 고른 다음 우측 버튼을 눌러주세요</p> 
+        <p>과목 선택을 누르면 모든 분반이 추가됩니다.</p>
+        <p>필수여부(O)를 토글해서 필수로 시간표에 포함시킬 것인지 정할 수 있습니다.</p>
+      </div>
+    </section>
     <section class="section">
       <subject-selector :search="search" :subject="subject" :category="category" v-model="과목"></subject-selector>
     </section>
-    <section class="section">
+    <section>
       <div class="container has-text-centered" >
         <div v-if="!result && !isProgress">
           <p>모바일 페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>

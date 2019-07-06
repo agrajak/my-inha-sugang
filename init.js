@@ -30,7 +30,6 @@ async function init () {
   await fs.writeFile('data/전공.json', JSON.stringify(전공, null, 2))
 
   let today = new Date()
-  
   let metadata = Object.assign({}, 
     {
       date: today.toISOString().substring(0, 10)

@@ -17,6 +17,31 @@
         <th></th>
       </thead>
       <tbody>
+
+        <!-- 선택가능 과목들 -->
+        <tr v-if="list_page.length == 0">
+          <td colspan="11" class="is-centered">조건에 해당하는 결과가 없습니다.</td>
+        </tr>
+
+        <tr v-else v-for="(cell, i) in list_page" :key="i+value.length">
+          <td>{{cell.sno}}</td>
+          <td>{{cell.subject}}</td>
+          <td>{{cell.deptName}}</td>
+          <td>{{cell.grade}}</td>
+          <td>{{cell.credit}}</td>
+          <td>{{cell.category}}</td>
+          <td>{{cell.time}}</td>
+          <td>{{cell.place}}</td>
+          <td>{{cell.name_pf}}</td>
+          <td>{{cell.rate}}</td>
+          <td>{{cell.bigo}}</td>
+          <td>
+            <div class="buttons has-addons">
+              <button :disabled="value.map(x=>x.code).indexOf(cell.sno.substring(0,7)) != -1" class="button is-small" @click="희망과목_추가(cell)">과목 선택</button>
+              <button :disabled="value.map(x=>x.code).indexOf(cell.sno) != -1" class="button is-small" @click="희망분반_추가(cell)">해당 분반만 선택</button>
+            </div>
+          </td>
+        </tr>
         <!-- 희망과목들 -->
         <tr v-for="(cell, i) in value" :key="i" class="is-selected">
           <template v-if="cell.code.indexOf('-') == -1">
@@ -57,30 +82,6 @@
               </div>
             </td>
           </template>
-        </tr>
-        <!-- 선택가능 과목들 -->
-        <tr v-if="list_page.length == 0">
-          <td colspan="11" class="is-centered">조건에 해당하는 결과가 없습니다.</td>
-        </tr>
-
-        <tr v-else v-for="(cell, i) in list_page" :key="i+value.length">
-          <td>{{cell.sno}}</td>
-          <td>{{cell.subject}}</td>
-          <td>{{cell.deptName}}</td>
-          <td>{{cell.grade}}</td>
-          <td>{{cell.credit}}</td>
-          <td>{{cell.category}}</td>
-          <td>{{cell.time}}</td>
-          <td>{{cell.place}}</td>
-          <td>{{cell.name_pf}}</td>
-          <td>{{cell.rate}}</td>
-          <td>{{cell.bigo}}</td>
-          <td>
-            <div class="buttons has-addons">
-              <button class="button is-small" @click="희망과목_추가(cell)">과목 선택</button>
-              <button class="button is-small" @click="  희망분반_추가(cell)">분반만 선택</button>
-            </div>
-          </td>
         </tr>
       </tbody>
     </table>
@@ -197,28 +198,28 @@ export default {
       }
       this.$emit('change', this.value)
     },
-    희망과목_추가(과목) {
+    희망과목_추가(코드) {
       // 같은 과목이 없을때
-      const 과목코드 = 과목.sno.match(/(.*)-(.*)/)[1]
+      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1]
       console.log(`과목코드 : ${과목코드}`)
       if(!this.value.map(x=>x.code).includes(과목코드)){
         this.value.push({
           code: 과목코드,
-          detail: 과목,
+          detail: 코드,
           important: true
         })
       }
       this.$emit('change', this.value)
     },
-    희망분반_추가(분반){
-      const 과목코드 = 분반.sno.match(/(.*)-(.*)/)[1]
-      const 분반코드 = 분반.sno
+    희망분반_추가(코드){
+      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1]
+      const 분반코드 = 코드.sno
       console.log(`분반코드 : ${분반코드}`)
       // 같은 분반 && 과목이 없을때 
       if(!this.value.map(x=>x.code).includes(분반코드) && !this.value.map(x=>x.code).includes(과목코드) ){
         this.value.push({
           code: 분반코드,
-          detail: 분반,
+          detail: 코드,
           important: true
         })
       }
