@@ -96,7 +96,7 @@
 </template>
 <script>
 import CellViewer from './CellViewer.vue'
-import { TimeTables, TimeTable } from '../util'
+import { TimeTables, TimeTable } from '../utils.js'
 export default {
   name: 'timetable-viewer',
   props: ['result'],

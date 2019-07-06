@@ -17,7 +17,6 @@
         <th></th>
       </thead>
       <tbody>
-
         <!-- 선택가능 과목들 -->
         <tr v-if="list_page.length == 0">
           <td colspan="11" class="is-centered">조건에 해당하는 결과가 없습니다.</td>
@@ -37,8 +36,16 @@
           <td>{{cell.bigo}}</td>
           <td>
             <div class="buttons has-addons">
-              <button :disabled="value.map(x=>x.code).indexOf(cell.sno.substring(0,7)) != -1" class="button is-small" @click="희망과목_추가(cell)">과목 선택</button>
-              <button :disabled="value.map(x=>x.code).indexOf(cell.sno) != -1" class="button is-small" @click="희망분반_추가(cell)">해당 분반만 선택</button>
+              <button
+                :disabled="value.map(x=>x.code).indexOf(cell.sno.substring(0,7)) != -1"
+                class="button is-small"
+                @click="희망과목_추가(cell)"
+              >과목 선택</button>
+              <button
+                :disabled="value.map(x=>x.code).indexOf(cell.sno) != -1"
+                class="button is-small"
+                @click="희망분반_추가(cell)"
+              >해당 분반만 선택</button>
             </div>
           </td>
         </tr>
@@ -59,7 +66,11 @@
             <td>
               <div class="buttons has-addons">
                 <button class="button is-small" @click="희망과목_삭제(cell.code)">해당 과목 선택해제</button>
-                <button @click="필수과목_토글(cell.code)" class="button is-small" :class="{'is-link': cell.important}">필수여부({{cell.important?'O':'X'}})</button>
+                <button
+                  @click="필수과목_토글(cell.code)"
+                  class="button is-small"
+                  :class="{'is-link': cell.important}"
+                >필수여부({{cell.important?'O':'X'}})</button>
               </div>
             </td>
           </template>
@@ -78,7 +89,11 @@
             <td>
               <div class="buttons has-addons">
                 <button class="button is-small" @click="희망분반_삭제(cell.code)">해당 분반 선택해제</button>
-                <button @click="필수과목_토글(cell.code)" class="button is-small" :class="{'is-link': cell.important}">필수여부({{cell.important?'O':'X'}})</button>
+                <button
+                  @click="필수과목_토글(cell.code)"
+                  class="button is-small"
+                  :class="{'is-link': cell.important}"
+                >필수여부({{cell.important?'O':'X'}})</button>
               </div>
             </td>
           </template>
@@ -90,153 +105,128 @@
       <span class="button is-small">{{index+1}} / {{max_page+1}}</span>
       <button class="button is-small" @click="next_page" :disabled="index == max_page">다음 페이지</button>
     </div>
-
   </div>
 </template>
 <script>
-import 전공 from '../data/전공.json'
-import 일반교양 from '../data/일반교양.json'
-import 핵심교양 from '../data/핵심교양.json'
-import 영어 from '../data/영어.json'
-import 교양필수 from '../data/교양필수.json'
+import 전공 from "../data/전공.json";
+import 일반교양 from "../data/일반교양.json";
+import 핵심교양 from "../data/핵심교양.json";
+import 영어 from "../data/영어.json";
+import 교양필수 from "../data/교양필수.json";
+import { 초성찾기 } from "../utils.js";
 export default {
-  name: 'subject-selector',
-  props: ['category', 'search', 'value', 'subject'],
-  created (){
-    this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수]
+  name: "subject-selector",
+  props: ["category", "search", "value", "subject"],
+  created() {
+    this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수];
   },
   watch: {
-    category () {
-      this.index = 0
+    category() {
+      this.index = 0;
     },
-    search () {
-      this.index = 0
+    search() {
+      this.index = 0;
     }
   },
   computed: {
     // pagination
-    list_page () {
-      if(this.list_size < this.pagination){
-        return this.filtered_list
-      }
-      else {
-        return this.filtered_list.slice(this.index*this.pagination, (this.index+1)*this.pagination)
+    list_page() {
+      if (this.list_size < this.pagination) {
+        return this.filtered_list;
+      } else {
+        return this.filtered_list.slice(
+          this.index * this.pagination,
+          (this.index + 1) * this.pagination
+        );
       }
     },
-    list_size(){
-      return this.filtered_list.length
+    list_size() {
+      return this.filtered_list.length;
     },
-    max_page(){
-      return Math.floor(this.list_size / this.pagination)
+    max_page() {
+      return Math.floor(this.list_size / this.pagination);
     },
     // 필터는 여기서 다하기
-    filtered_list (){
-      function is한글(str){
-        return /[ㄱ-ㅎ|ㄳ-ㅄ|가-힝]/.test(str)
-        // http://blog.daum.net/osban/14691815
-      }
-      function 초성(str) {
-        if(is한글(str)){
-          const 초 = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
-          const 겹 = {"ㄳ": "ㄱㅅ", "ㄵ": "ㄴㅈ", "ㄶ": "ㄴㅎ", "ㄺ":"ㄹㄱ", "ㄻ":"ㄹㅁ", "ㄼ":"ㄹㅂ", "ㄽ":"ㄹㅅ", "ㄿ":"ㄹㅍ", "ㅀ":"ㄹㅎ", "ㅄ": "ㅂㅅ"}
-          let result = "";
-          for(let i=0;i<str.length;i++) {
-            const code = str.charCodeAt(i)-44032
-            const c = str.charAt(i)
-            if(Object.keys(겹).includes(c)){
-              result += 겹[c]
-            }
-            else if(초.includes(c)){
-              result += c
-            }
-            else if(code>-1 && code<11172) result += 초[Math.floor(code/588)]; 
-          }
-          return result;
-        }
-        return str
-      }
-      let list = []      
-      console.log(초성(this.search))
-      list = this.list.filter(x=>초성(x.subject).indexOf(초성(this.search))!= -1)
-
+    filtered_list() {
+      let list = 초성찾기(this.list, this.search);
       // 카테고리로 필터
-      if(this.category != '전체'){
-        list = list.filter(x=>x.category == this.category)
-      } 
-      //list = list.filter(x=>x.category == this.category)
-      list = list.filter(x=>(x.deptName == undefined) || x.deptName.indexOf(this.subject) != -1)
-      return list      
+      if (this.category != "전체") {
+        list = list.filter(x => x.category == this.category);
+      }
+      list = list.filter(
+        x => x.deptName == undefined || x.deptName.indexOf(this.subject) != -1
+      );
+      return list;
     }
   },
   methods: {
-    next_page () {
-      this.index = this.index==this.max_page ? this.max_page:this.index+1
+    next_page() {
+      this.index = this.index == this.max_page ? this.max_page : this.index + 1;
     },
     previous_page() {
-      this.index = this.index==0?0:this.index-1
+      this.index = this.index == 0 ? 0 : this.index - 1;
     },
-    필수과목_토글(코드){
-      console.log('딸깍!')
-      const index = this.value.map(x=>x.code).indexOf(코드)
-      if(index != -1){
-        this.value[index].important = !this.value[index].important
+    필수과목_토글(코드) {
+      const index = this.value.map(x => x.code).indexOf(코드);
+      if (index != -1) {
+        this.value[index].important = !this.value[index].important;
       }
-      console.log(index)
-      this.$emit('change', this.value)
+      this.$emit("change", this.value);
     },
-    희망과목_삭제(과목코드){
-      const index = this.value.map(x=>x.code).indexOf(과목코드)
-      if(index != -1){
-        this.value.splice(index, 1)
+    희망과목_삭제(과목코드) {
+      const index = this.value.map(x => x.code).indexOf(과목코드);
+      if (index != -1) {
+        this.value.splice(index, 1);
       }
-      this.$emit('change', this.value)
+      this.$emit("change", this.value);
     },
-    희망분반_삭제(분반코드){
-      const index = this.value.map(x=>x.code).indexOf(분반코드)
-      if(index != -1){
-        this.value.splice(index, 1)
+    희망분반_삭제(분반코드) {
+      const index = this.value.map(x => x.code).indexOf(분반코드);
+      if (index != -1) {
+        this.value.splice(index, 1);
       }
-      this.$emit('change', this.value)
+      this.$emit("change", this.value);
     },
     희망과목_추가(코드) {
       // 같은 과목이 없을때
-      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1]
-      console.log(`과목코드 : ${과목코드}`)
-      if(!this.value.map(x=>x.code).includes(과목코드)){
+      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1];
+      if (!this.value.map(x => x.code).includes(과목코드)) {
         this.value.push({
           code: 과목코드,
           detail: 코드,
           important: true
-        })
+        });
       }
-      this.$emit('change', this.value)
+      this.$emit("change", this.value);
     },
-    희망분반_추가(코드){
-      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1]
-      const 분반코드 = 코드.sno
-      console.log(`분반코드 : ${분반코드}`)
-      // 같은 분반 && 과목이 없을때 
-      if(!this.value.map(x=>x.code).includes(분반코드) && !this.value.map(x=>x.code).includes(과목코드) ){
+    희망분반_추가(코드) {
+      const 과목코드 = 코드.sno.match(/(.*)-(.*)/)[1];
+      const 분반코드 = 코드.sno;
+      // 같은 분반 && 과목이 없을때
+      if (
+        !this.value.map(x => x.code).includes(분반코드) &&
+        !this.value.map(x => x.code).includes(과목코드)
+      ) {
         this.value.push({
           code: 분반코드,
           detail: 코드,
           important: true
-        })
+        });
       }
-      this.$emit('change', this.value)
+      this.$emit("change", this.value);
     }
   },
-  data (){
+  data() {
     return {
       list: [],
       index: 0,
       pagination: 12
-    }
+    };
   }
-}
+};
 </script>
 <style>
-#subject-selector{
+#subject-selector {
   font-size: 0.8em;
 }
 </style>

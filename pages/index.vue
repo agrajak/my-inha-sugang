@@ -114,7 +114,7 @@
   </div>
 </template>
 <script>
-import {Cell, Cells} from '../util.js'
+import {Cell, Cells} from '../utils.js'
 import {run, getUpdatedDate} from '../index.js'
 import TimeTableViewer from '../components/TimeTableViewer.vue'
 import SubjectSelector from '../components/SubjectSelector.vue'

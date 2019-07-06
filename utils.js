@@ -22,6 +22,7 @@ const 교시2시간_끝 = (교시)=> {
   }
   return `${교시/2+8}시 15분`
 }
+
 class TimeTables {
   constructor(){
     this.arr = []
@@ -266,4 +267,31 @@ class Cell {
   getBunBan() { return this.data.sno.match(/(.*)-(.*)/)[2] }
   getSno() { return this.data.sno.match(/(.*)-(.*)/)[1] }
 }
-export { Cell, Cells, TimeTable, TimeTables}
+function 초성찾기(list, search){
+  function is한글(str){
+    return /[ㄱ-ㅎ|ㄳ-ㅄ|가-힝]/.test(str)
+    // http://blog.daum.net/osban/14691815
+  }
+  function 초성(str) {
+    if(is한글(str)){
+      const 초 = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+      const 겹 = {"ㄳ": "ㄱㅅ", "ㄵ": "ㄴㅈ", "ㄶ": "ㄴㅎ", "ㄺ":"ㄹㄱ", "ㄻ":"ㄹㅁ", "ㄼ":"ㄹㅂ", "ㄽ":"ㄹㅅ", "ㄿ":"ㄹㅍ", "ㅀ":"ㄹㅎ", "ㅄ": "ㅂㅅ"}
+      let result = "";
+      for(let i=0;i<str.length;i++) {
+        const code = str.charCodeAt(i)-44032
+        const c = str.charAt(i)
+        if(Object.keys(겹).includes(c)){
+          result += 겹[c]
+        }
+        else if(초.includes(c)){
+          result += c
+        }
+        else if(code>-1 && code<11172) result += 초[Math.floor(code/588)]; 
+      }
+      return result;
+    }
+    return str
+  }
+  return list.filter(x=>초성(x.subject).indexOf(초성(search))!= -1)
+}
+export { Cell, Cells, TimeTable, TimeTables, 초성찾기 }

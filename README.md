@@ -12,6 +12,7 @@
 ## 해야할 것
  - 이름, 로고, 파비콘 멋진거로 바꾸기
  - 툴팁 형식의 가이드 추가
+ - 일관된 네이밍 정리(한글? 영어? CamelCase?)
  - 핵교 선택 넣기
    - utils.js안의 Cells.prototype.isAvailable()에서 같은 핵교가 추가되면 false를 리턴하도록 변경하게
 

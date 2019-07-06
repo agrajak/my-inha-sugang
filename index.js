@@ -1,4 +1,4 @@
-import { Cell, Cells } from './util.js'
+import { Cell, Cells } from './utils.js'
 const 전공 = require('./data/전공.json')
 const 일반교양 = require('./data/일반교양.json')
 const 핵심교양 = require('./data/핵심교양.json')
