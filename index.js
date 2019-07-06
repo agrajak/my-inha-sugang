@@ -4,7 +4,12 @@ const 일반교양 = require('./data/일반교양.json')
 const 핵심교양 = require('./data/핵심교양.json')
 const 영어 = require('./data/영어.json')
 const 교양필수 = require('./data/교양필수.json')
+const metadata = require('./data/metadata.json')
 
+
+function getUpdatedDate(){
+  return metadata.date || 'NO DATE!'
+}
 async function 희망과목_고르기(희망과목=[], 필수과목=[]){
   const list = new Cells()
   const 시간표 = [...전공, ...영어, ...일반교양, ...교양필수, ...핵심교양]
@@ -103,4 +108,4 @@ async function run(희망과목, 필수과목, maxCredit=19, minCredit=1){
   console.log(` * 필수로 포함시켜야할 과목이 포함된 리스트 갯수 : ${result.length}`)
   return result
 }
-export default run 
+export {run, getUpdatedDate}

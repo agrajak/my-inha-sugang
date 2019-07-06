@@ -11,7 +11,8 @@
 
 ## 해야할 것
  - 이름, 로고, 파비콘 멋진거로 바꾸기
- - SubjectSelector에서 선택된 과목은 표시 안되도록 변경
+ - 툴팁 형식의 가이드 추가
+ - SubjectSelector에서 선택된 과목은 표시 안되도록 변경 -> 별도의 표에 장바구니 저장하는 것으로 변경 고려해보기
  - 핵교 선택 넣기
    - utils.js안의 Cells.prototype.isAvailable()에서 같은 핵교가 추가되면 false를 리턴하도록 변경하게
 

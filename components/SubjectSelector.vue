@@ -60,7 +60,7 @@
         </tr>
         <!-- 선택가능 과목들 -->
         <tr v-if="list_page.length == 0">
-          <td colspan="11" class="is-centered">조건에 해당하는 결과값이 없습니다.</td>
+          <td colspan="11" class="is-centered">조건에 해당하는 결과가 없습니다.</td>
         </tr>
 
         <tr v-else v-for="(cell, i) in list_page" :key="i+value.length">
@@ -78,7 +78,7 @@
           <td>
             <div class="buttons has-addons">
               <button class="button is-small" @click="희망과목_추가(cell)">과목 선택</button>
-              <button class="button is-small" @click="희망분반_추가(cell)">분반만 선택</button>
+              <button class="button is-small" @click="  희망분반_추가(cell)">분반만 선택</button>
             </div>
           </td>
         </tr>

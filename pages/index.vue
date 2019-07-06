@@ -8,7 +8,7 @@
               인하대학교 시간표 생성기 v{{version}}
             </h1>
             <h2 class="subtitle">
-              임시로 정보통신공학과와 컴퓨터공학과만 지원합니다. <strong><a href="https://www.notion.so/agrajak/c6732e39aa41449a8e3e596bf9054f73" target="_blank">사용법</a></strong>(클릭)
+              임시로 정보통신공학과와 컴퓨터공학과만 지원합니다. ({{date}}일자 시간표) <strong>사용법</strong>(<a href="https://www.notion.so/agrajak/c6732e39aa41449a8e3e596bf9054f73" target="_blank">클릭</a>)
             </h2>
           </div>
         </div>
@@ -79,8 +79,8 @@
     <section class="section">
       <div class="container has-text-centered" >
         <div v-if="!result && !isProgress">
-          <p class="help">모바일 페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>
-          <p class="help">해당 서비스는 이용자가 제공하는 시간표를 사용하는 것에 대하여 어떠한 책임도 지지 않습니다.</p>
+          <p>모바일 페이지에서는 표가 보이지 않습니다. 토요일 시간표는 제공하지 않습니다.</p>
+          <p>해당 서비스는 이용자가 제공하는 시간표를 사용하는 것에 대하여 어떠한 책임도 지지 않습니다.</p>
         </div>
         <div class="section">
           <button @click="getResult()" class="button is-centered is-link is-medium" :class="{'is-loading':isProgress}">시간표 계산하기</button>
@@ -108,7 +108,7 @@
 </template>
 <script>
 import {Cell, Cells} from '../util.js'
-import run from '../index.js'
+import {run, getUpdatedDate} from '../index.js'
 import TimeTableViewer from '../components/TimeTableViewer.vue'
 import SubjectSelector from '../components/SubjectSelector.vue'
 import Package from '../package.json'
@@ -133,6 +133,9 @@ export default {
   computed: {
     version () {
       return Package.version
+    },
+    date(){
+      return getUpdatedDate()
     }
   },
   methods: {

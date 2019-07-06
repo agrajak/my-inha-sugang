@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "generate": "nuxt generate",
+    "fetch": "node init",
     "dev": "nuxt"
   },
   "author": "korbots@gmail.com",
