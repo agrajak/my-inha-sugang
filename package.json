@@ -13,7 +13,7 @@
     "@nuxtjs/google-analytics": "^2.1.0",
     "fs-extra": "^7.0.1",
     "inha-timetable": "^1.0.6",
-    "nuxt": "^2.4.3",
+    "nuxt": "^2.8.1",
     "push-dir": "^0.4.1",
     "request": "^2.88.0",
     "v-suggest": "^1.1.3"
