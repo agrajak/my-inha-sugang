@@ -3,23 +3,23 @@
   <div id="subject-selector">
     <table class="table is-narrow is-hoverable is-fullwidth">
       <thead>
-        <th>학수번호</th>
-        <th>과목이름</th>
-        <th>학과</th>
-        <th>학년</th>
-        <th>학점</th>
-        <th>분류</th>
-        <th>시간</th>
-        <th>장소</th>
-        <th>교수이름</th>
-        <th>평가</th>
-        <th>비고</th>
+        <th>{{string_resources.SNO}}</th>
+        <th>{{string_resources.SUBJECT}}</th>
+        <th>{{string_resources.DEPARTMENT}}</th>
+        <th>{{string_resources.GRADE}}</th>
+        <th>{{string_resources.CREDIT}}</th>
+        <th>{{string_resources.CATEGORY}}</th>
+        <th>{{string_resources.TIME}}</th>
+        <th>{{string_resources.PLACE}}</th>
+        <th>{{string_resources.PROFESSOR}}</th>
+        <th>{{string_resources.RATE}}</th>
+        <th>{{string_resources.REMARK}}</th>
         <th></th>
       </thead>
       <tbody>
         <!-- 선택가능 과목들 -->
         <tr v-if="list_page.length == 0">
-          <td colspan="11" class="is-centered">조건에 해당하는 결과가 없습니다.</td>
+          <td colspan="11" class="is-centered">{{string_resources.NO_RESULT_OF_CONDITION}}</td>
         </tr>
 
         <tr v-else v-for="(cell, i) in list_page" :key="i+value.length">
@@ -40,12 +40,12 @@
                 :disabled="value.map(x=>x.code).indexOf(cell.sno.substring(0,7)) != -1"
                 class="button is-small"
                 @click="희망과목_추가(cell)"
-              >과목 선택</button>
+              >{{string_resources.SELECT_SUBJECT}}</button>
               <button
                 :disabled="value.map(x=>x.code).indexOf(cell.sno) != -1"
                 class="button is-small"
                 @click="희망분반_추가(cell)"
-              >해당 분반만 선택</button>
+              >{{string_resources.SELECT_THE_CLASS}}</button>
             </div>
           </td>
         </tr>
@@ -70,7 +70,7 @@
                   @click="필수과목_토글(cell.code)"
                   class="button is-small"
                   :class="{'is-link': cell.important}"
-                >필수여부({{cell.important?'O':'X'}})</button>
+                >{{string_resources.IS_REQUIRED}}({{cell.important?'O':'X'}})</button>
               </div>
             </td>
           </template>
@@ -93,7 +93,7 @@
                   @click="필수과목_토글(cell.code)"
                   class="button is-small"
                   :class="{'is-link': cell.important}"
-                >필수여부({{cell.important?'O':'X'}})</button>
+                >{{string_resources.IS_REQUIRED}}({{cell.important?'O':'X'}})</button>
               </div>
             </td>
           </template>
@@ -114,10 +114,13 @@ import 핵심교양 from "../data/핵심교양.json";
 import 영어 from "../data/영어.json";
 import 교양필수 from "../data/교양필수.json";
 import { 초성찾기 } from "../utils.js";
+import string_resources from "../resources/stringresources.js"
+
 export default {
   name: "subject-selector",
   props: ["category", "search", "value", "subject"],
   created() {
+    this.string_resources = string_resources;
     this.list = [...전공, ...일반교양, ...핵심교양, ...영어, ...교양필수];
   },
   watch: {

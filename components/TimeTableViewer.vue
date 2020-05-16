@@ -2,8 +2,8 @@
   <!-- 계산된 시간표들을 보여줍니다. -->
   <div id="timetable-viewer" v-if="result">
     <div v-if="result.length == 0">
-      조건에 맞는 시간표가 하나도 없어요... <br>
-      필수 분반끼리 시간이 겹치는지 한번 확인해주세요..
+      {{string_resources.NO_RESULT_OF_CONDITION_TIMETABLE_VIEW}}. <br>
+      {{string_resources.PLEASE_CONFIRM}}
     </div>
     <div v-else>
       <div v-if="result.length > 0">
@@ -20,7 +20,7 @@
               <nav class="level box" v-if="timetable">
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">정렬기준</p>
+                    <p class="heading">{{string_resources.SORT_CONDITION}}</p>
                     <div class="select">
                       <select v-model="sortBy">
                         <option v-for="(field,i) in sortFields" :key="i" :value="field">{{field}}</option>
@@ -30,25 +30,25 @@
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">총 학점</p>
+                    <p class="heading">{{string_resources.SUM_CREDIT}}</p>
                     <p class="title">{{timetable.총학점}}</p>
                   </div>
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">총 수업시간</p>
+                    <p class="heading">{{string_resources.SUM_TIME}}</p>
                     <p class="title">{{Math.floor(timetable.수업시간/4)}}시간 {{(timetable.수업시간*15)%60}}분</p>
                   </div>
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">최장 연강</p>
+                    <p class="heading">{{string_resources.LONGEST_CONTINUOUS_CLASS}}</p>
                     <p class="title">{{Math.floor(timetable.최장연강/4)}}시간 {{(timetable.최장연강*15)%60}}분</p>
                   </div>
                 </div>
                 <div class="level-item has-text-centered">
                   <div>
-                    <p class="heading">수업일수</p>
+                    <p class="heading">{{string_resources.DAY}}</p>
                     <p class="title">{{timetable.수업일수}}/5</p>
                   </div>
                 </div>
@@ -86,9 +86,9 @@
         </div>
       </div>
       <p class="has-text-centered">
-        과목과 교시에 마우스 커서를 올리시면 더 자세한 정보를 확인할 수 있습니다.<br>
-        표가 한 화면에 보이지 않으면 Ctrl +, -로 조정하세요 <br>
-        경우의 수가 너무 많으면 최소학점/최대학점을 조절해보세요
+        {{string_resources.MORE_INFO}}<br>
+        {{string_resources.CANNOT_SEE_ONE_VIEW}} <br>
+        {{string_resources.TOO_MANY_TIMETABLES}}
       </p>
 
     </div>
@@ -97,6 +97,7 @@
 <script>
 import CellViewer from './CellViewer.vue'
 import { TimeTables, TimeTable } from '../utils.js'
+import string_resources from "../resources/stringresources.js"
 export default {
   name: 'timetable-viewer',
   props: ['result'],
@@ -130,6 +131,7 @@ export default {
     }
   },
   mounted (){
+    this.string_resources = string_resources;
     this.convertCells()
   },
   methods: {
